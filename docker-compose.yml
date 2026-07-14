@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "123"
+      POSTGRES_DB: bbook
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  backend:
+    build: ./bbook_backend
+    restart: unless-stopped
+    depends_on:
+      - db
+    env_file:
+      - ./bbook_backend/.env
+    environment:
+      DATABASE_URL: "postgresql://postgres:123@db:5432/bbook"
+      PORT: 3001
+    ports:
+      - "3001:3001"
+
+  frontend:
+    build: ./bbook_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    env_file:
+      - ./bbook_frontend/.env
+    environment:
+      API_URL: "http://backend:3001"
+    ports:
+      - "3000:3000"
+
+volumes:
+  db_data:
