@@ -36,8 +36,18 @@ export default function LiffLinkPage() {
         }
         const result = await linkLineAction(idToken);
         if (result.error) {
+          const alreadyRetried = sessionStorage.getItem("liff_retry") === "1";
+          const isTokenError = result.error.includes("LINE token");
+          if (isTokenError && !alreadyRetried) {
+            sessionStorage.setItem("liff_retry", "1");
+            liff.logout();
+            liff.login();
+            return;
+          }
+          sessionStorage.removeItem("liff_retry");
           setStatus({ kind: "error", message: result.error });
         } else {
+          sessionStorage.removeItem("liff_retry");
           setStatus({ kind: "success", message: "ผูกบัญชี LINE สำเร็จ" });
           setTimeout(() => {
             router.push("/");
