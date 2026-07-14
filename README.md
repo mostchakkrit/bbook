@@ -48,6 +48,19 @@
 
 ## เริ่มใช้งาน
 
+### รันด้วย Docker (แนะนำ)
+
+ทั้งระบบ (backend + frontend + PostgreSQL) รันพร้อมกันได้ด้วยคำสั่งเดียว ผ่าน `docker-compose.yml` ที่ root:
+
+```bash
+docker compose up --build
+```
+
+- Frontend: `http://localhost:3000`
+- Backend / Swagger API docs: `http://localhost:3001/api`
+
+### รันแยกแต่ละส่วนบนเครื่อง (ไม่ผ่าน Docker)
+
 ดูรายละเอียดการติดตั้งและรันแต่ละส่วนได้ที่:
 - [Backend README](./bbook_backend/README.md)
 - [Frontend README](./bbook_frontend/README.md)
