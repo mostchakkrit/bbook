@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { PrismaService } from 'prisma/prisma.service';
@@ -16,7 +16,11 @@ export class RoomService {
   }
 
   async findOne(id: string) {
-    return await this.prismaService.room.findUnique({ where: { id } });
+    const room = await this.prismaService.room.findUnique({ where: { id } });
+    if (!room) {
+      throw new NotFoundException('ไม่พบห้องประชุม');
+    }
+    return room;
   }
 
   async update(id: string, updateRoomDto: UpdateRoomDto) {

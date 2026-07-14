@@ -20,3 +20,9 @@ export const apiFetch = async (path: string, options?: RequestInit) => {
   });
   return res;
 };
+
+export const getCurrentUser = async () => {
+  const res = await apiFetchAuth("/user/me");
+  if (!res.ok) return null;
+  return res.json() as Promise<{ id: string; lineUserId: string | null }>;
+};

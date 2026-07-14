@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarDays, DoorOpen, LogOut, MessageCircle } from "lucide-react";
+import { CalendarDays, CheckCircle2, DoorOpen, LogOut, MessageCircle, ShieldCheck } from "lucide-react";
 
 import { logoutAction } from "@/app/logout-action";
 import { Button } from "@/components/ui/button";
@@ -11,10 +11,15 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: "/", label: "ห้องประชุม", icon: DoorOpen },
   { href: "/bookings", label: "การจองของฉัน", icon: CalendarDays },
-  { href: "/liff-link", label: "เชื่อมต่อ LINE", icon: MessageCircle },
 ];
 
-export function SiteHeader() {
+export function SiteHeader({
+  lineLinked = false,
+  isAdmin = false,
+}: {
+  lineLinked?: boolean;
+  isAdmin?: boolean;
+}) {
   const pathname = usePathname();
 
   return (
@@ -49,6 +54,39 @@ export function SiteHeader() {
               </Link>
             );
           })}
+          {lineLinked ? (
+            <span className="flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-success cursor-not-allowed sm:px-3">
+              <CheckCircle2 className="size-4" />
+              <span className="hidden sm:inline">เชื่อมต่อ Line แล้ว✅</span>
+            </span>
+          ) : (
+            <Link
+              href="/liff-link"
+              className={cn(
+                "flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors sm:px-3",
+                pathname === "/liff-link"
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              )}
+            >
+              <MessageCircle className="size-4" />
+              <span className="hidden sm:inline">เชื่อมต่อ LINE</span>
+            </Link>
+          )}
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className={cn(
+                "flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors sm:px-3",
+                pathname.startsWith("/admin")
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              )}
+            >
+              <ShieldCheck className="size-4" />
+              <span className="hidden sm:inline">จัดการระบบ</span>
+            </Link>
+          )}
         </nav>
 
         <form action={logoutAction} className="shrink-0">

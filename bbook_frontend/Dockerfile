@@ -6,6 +6,10 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
+
+ARG NEXT_PUBLIC_LIFF_ID
+ENV NEXT_PUBLIC_LIFF_ID=$NEXT_PUBLIC_LIFF_ID
+
 RUN npm run build
 
 # ---- Stage 2: production runner ----

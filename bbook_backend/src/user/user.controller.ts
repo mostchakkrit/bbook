@@ -36,6 +36,12 @@ export class UserController {
     return this.userService.linkLine(jwtPayloadDto.userId, linkLinedto.idToken);
   }
 
+  @Get('me')
+  @UseGuards(AuthGuard('jwt'))
+  findMe(@CurrentUser() jwtPayloadDto: JwtPayloadDto) {
+    return this.userService.findOne(jwtPayloadDto.userId);
+  }
+
   @Get(':id')
   @UseGuards(AuthGuard('jwt'))
   findOne(@Param('id') id: string) {

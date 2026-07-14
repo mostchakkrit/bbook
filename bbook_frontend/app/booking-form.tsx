@@ -5,7 +5,7 @@ import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 import { createBookingAction } from "./book-actions";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { DateTimeField } from "@/components/ui/date-time-field";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -24,44 +24,33 @@ export function BookingForm({ rooms }: { rooms: any[] }) {
 
   return (
     <form action={formAction} className="space-y-5">
-      <div className="grid gap-4 sm:grid-cols-3">
-        <div className="space-y-1.5">
-          <Label htmlFor="roomId">ห้อง</Label>
-          <Select name="roomId" required>
-            <SelectTrigger id="roomId" className="w-full">
-              <SelectValue placeholder="เลือกห้อง">
-                {(value: string) => roomNameById[value] ?? "เลือกห้อง"}
-              </SelectValue>
-            </SelectTrigger>
+      <div className="space-y-1.5">
+        <Label htmlFor="roomId">ห้อง</Label>
+        <Select name="roomId" required>
+          <SelectTrigger id="roomId" className="w-full">
+            <SelectValue placeholder="เลือกห้อง">
+              {(value: string) => roomNameById[value] ?? "เลือกห้อง"}
+            </SelectValue>
+          </SelectTrigger>
 
-            <SelectContent>
-              {rooms.map((room) => (
-                <SelectItem key={room.id} value={room.id}>
-                  {room.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <SelectContent>
+            {rooms.map((room) => (
+              <SelectItem key={room.id} value={room.id}>
+                {room.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label>เวลาเริ่ม</Label>
+          <DateTimeField name="startTime" required minDate={new Date()} />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="startTime">เวลาเริ่ม</Label>
-          <Input
-            id="startTime"
-            name="startTime"
-            type="datetime-local"
-            required
-            min={new Date().toISOString().slice(0, 16)}
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="endTime">เวลาสิ้นสุด</Label>
-          <Input
-            id="endTime"
-            name="endTime"
-            type="datetime-local"
-            required
-            min={new Date().toISOString().slice(0, 16)}
-          />
+          <Label>เวลาสิ้นสุด</Label>
+          <DateTimeField name="endTime" required minDate={new Date()} />
         </div>
       </div>
 

@@ -4,28 +4,14 @@ import { redirect } from "next/navigation";
 import { apiFetchAuth, getCurrentUser } from "@/lib/api";
 import { getSession } from "@/lib/session";
 import { SiteHeader } from "@/components/site-header";
-import { Badge } from "@/components/ui/badge";
+import { AdminNav } from "@/components/admin-nav";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { cancelBookingAction } from "./actions";
+import { updateBookingStatusAction } from "./actions";
 
-function StatusBadge({ status }: { status: string }) {
-  const s = status?.toLowerCase() ?? "";
-  if (s.includes("approve") || s.includes("confirm")) {
-    return <Badge variant="success">อนุมัติแล้ว</Badge>;
-  }
-  if (s.includes("reject")) {
-    return <Badge variant="destructive">ถูกปฏิเสธ</Badge>;
-  }
-  if (s.includes("cancel")) {
-    return <Badge variant="secondary">ยกเลิกแล้ว</Badge>;
-  }
-  return <Badge variant="warning">รออนุมัติ</Badge>;
-}
-
-export default async function BookingsPage() {
+export default async function AdminBookingsPage() {
   const [res, currentUser, session] = await Promise.all([
-    apiFetchAuth("/book"),
+    apiFetchAuth("/book/pending"),
     getCurrentUser(),
     getSession(),
   ]);
@@ -41,17 +27,19 @@ export default async function BookingsPage() {
       <main className="mx-auto w-full max-w-3xl flex-1 space-y-6 px-4 py-10 sm:px-6">
         <div className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-            การจองของฉัน
+            จัดการระบบ
           </h1>
           <p className="text-sm text-muted-foreground">
-            รายการคำขอจองห้องประชุมทั้งหมดของคุณ
+            คำขอจองที่รออนุมัติ
           </p>
         </div>
+
+        <AdminNav />
 
         {bookings.length === 0 ? (
           <Card>
             <CardContent className="py-10 text-center text-sm text-muted-foreground">
-              ยังไม่มีรายการจอง
+              ไม่มีคำขอจองที่รออนุมัติ
             </CardContent>
           </Card>
         ) : (
@@ -60,26 +48,42 @@ export default async function BookingsPage() {
               <Card key={b.id}>
                 <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="space-y-1.5">
-                    <div className="flex items-center gap-2">
-                      <p className="font-medium text-foreground">
-                        {b.room.name}
-                      </p>
-                      <StatusBadge status={b.status} />
-                    </div>
+                    <p className="font-medium text-foreground">
+                      {b.room.name}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {b.user.firstName} {b.user.lastName} ({b.user.email})
+                    </p>
                     <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
                       <CalendarClock className="size-3.5 shrink-0" />
                       {new Date(b.startTime).toLocaleString("th-TH")} -{" "}
                       {new Date(b.endTime).toLocaleString("th-TH")}
                     </p>
                   </div>
-                  <form
-                    action={cancelBookingAction.bind(null, b.id)}
-                    className="shrink-0"
-                  >
-                    <Button variant="destructive" size="sm" type="submit">
-                      ยกเลิก
-                    </Button>
-                  </form>
+                  <div className="flex shrink-0 gap-2">
+                    <form
+                      action={updateBookingStatusAction.bind(
+                        null,
+                        b.id,
+                        "REJECTED"
+                      )}
+                    >
+                      <Button variant="destructive" size="sm" type="submit">
+                        ปฏิเสธ
+                      </Button>
+                    </form>
+                    <form
+                      action={updateBookingStatusAction.bind(
+                        null,
+                        b.id,
+                        "APPROVED"
+                      )}
+                    >
+                      <Button size="sm" type="submit">
+                        อนุมัติ
+                      </Button>
+                    </form>
+                  </div>
                 </CardContent>
               </Card>
             ))}

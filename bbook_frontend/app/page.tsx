@@ -1,8 +1,10 @@
-import { MapPin, Users } from "lucide-react";
+import { MapPin, Presentation, Users } from "lucide-react";
 import { redirect } from "next/navigation";
 
-import { apiFetchAuth } from "@/lib/api";
+import { apiFetchAuth, getCurrentUser } from "@/lib/api";
+import { getSession } from "@/lib/session";
 import { SiteHeader } from "@/components/site-header";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -12,8 +14,17 @@ import {
 } from "@/components/ui/card";
 import { BookingForm } from "./booking-form";
 
+const AMENITY_LABELS: Record<string, string> = {
+  projector: "มีจอโปรเจคเตอร์",
+  whiteboard: "ไวท์บอร์ด",
+};
+
 export default async function HomePage() {
-  const res = await apiFetchAuth("/room");
+  const [res, currentUser, session] = await Promise.all([
+    apiFetchAuth("/room"),
+    getCurrentUser(),
+    getSession(),
+  ]);
   if (!res.ok) {
     redirect("/login");
   }
@@ -21,7 +32,10 @@ export default async function HomePage() {
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader
+        lineLinked={!!currentUser?.lineUserId}
+        isAdmin={session?.role === "admin"}
+      />
       <main className="mx-auto w-full max-w-5xl flex-1 space-y-10 px-4 py-10 sm:px-6">
         <div className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">
@@ -47,6 +61,22 @@ export default async function HomePage() {
                     จุได้ {room.capacity} คน
                   </span>
                 </CardDescription>
+                {Array.isArray(room.amenities) && room.amenities.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-2">
+                    {room.amenities.map((amenity: string) => (
+                      <Badge
+                        key={amenity}
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
+                        {amenity === "projector" && (
+                          <Presentation className="size-3.5" />
+                        )}
+                        {AMENITY_LABELS[amenity] ?? amenity}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
               </CardHeader>
             </Card>
           ))}

@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { apiFetch } from "@/lib/api";
+import { decodeJwt } from "@/lib/jwt";
 
 export async function loginAction(prevState: any, formData: FormData) {
   const res = await apiFetch("/auth/login", {
@@ -36,5 +37,6 @@ export async function loginAction(prevState: any, formData: FormData) {
     path: "/",
   });
 
-  redirect("/");
+  const role = decodeJwt(data.accessToken)?.role;
+  redirect(role === "admin" ? "/admin" : "/");
 }

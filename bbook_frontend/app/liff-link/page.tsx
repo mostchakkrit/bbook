@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
 
 import { linkLineAction } from "./action";
@@ -13,6 +14,7 @@ type Status = {
 };
 
 export default function LiffLinkPage() {
+  const router = useRouter();
   const [status, setStatus] = useState<Status>({
     kind: "loading",
     message: "กำลังเชื่อมต่อ LINE...",
@@ -37,6 +39,10 @@ export default function LiffLinkPage() {
           setStatus({ kind: "error", message: result.error });
         } else {
           setStatus({ kind: "success", message: "ผูกบัญชี LINE สำเร็จ" });
+          setTimeout(() => {
+            router.push("/");
+            router.refresh();
+          }, 1200);
         }
       } catch (err) {
         console.error("LIFF error:", err);

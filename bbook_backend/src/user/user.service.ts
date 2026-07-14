@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -81,8 +82,13 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    const user = await this.prismaService.user.findUnique({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('ไม่พบผู้ใช้งาน');
+    }
+    const { password, ...result } = user;
+    return result;
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
