@@ -8,6 +8,7 @@ import { AdminNav } from "@/components/admin-nav";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { updateBookingStatusAction } from "./actions";
+import type { Booking } from "@/lib/types";
 
 export default async function AdminBookingsPage() {
   const [res, currentUser, session] = await Promise.all([
@@ -44,7 +45,7 @@ export default async function AdminBookingsPage() {
           </Card>
         ) : (
           <div className="space-y-3">
-            {bookings.map((b: any) => (
+            {bookings.map((b: Booking) => (
               <Card key={b.id}>
                 <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="space-y-1.5">

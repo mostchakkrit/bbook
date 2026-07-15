@@ -1,7 +1,8 @@
 import { IsIn, IsNotEmpty } from 'class-validator';
+import { BookingStatus } from 'generated/prisma/client';
 
 export class UpdateBookStatusDto {
   @IsNotEmpty()
-  @IsIn(['APPROVED', 'REJECTED'])
-  status: string;
+  @IsIn([BookingStatus.APPROVED, BookingStatus.REJECTED])
+  status: 'APPROVED' | 'REJECTED';
 }

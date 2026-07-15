@@ -14,8 +14,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import type { Room } from "@/lib/types";
 
-export function BookingForm({ rooms }: { rooms: any[] }) {
+export function BookingForm({ rooms }: { rooms: Room[] }) {
   const [state, formAction, pending] = useActionState(
     createBookingAction,
     null,

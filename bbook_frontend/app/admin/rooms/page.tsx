@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { deleteRoomAction } from "./actions";
+import type { Room } from "@/lib/types";
 
 const AMENITY_LABELS: Record<string, string> = {
   projector: "มีจอโปรเจคเตอร์",
@@ -60,7 +61,7 @@ export default async function AdminRoomsPage() {
           </Card>
         ) : (
           <div className="space-y-3">
-            {rooms.map((room: any) => (
+            {rooms.map((room: Room) => (
               <Card key={room.id}>
                 <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="space-y-1.5">

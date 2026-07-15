@@ -15,7 +15,7 @@ export class LineService {
       }),
     });
     if (!res.ok) {
-      const error = await res.json();
+      const error: unknown = await res.json();
       console.error('LINE push error:', error);
     }
   }

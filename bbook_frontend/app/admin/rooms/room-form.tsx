@@ -24,7 +24,7 @@ export function RoomForm({
   room,
   submitLabel,
 }: {
-  action: (prevState: any, formData: FormData) => Promise<{ error?: string }>;
+  action: (prevState: unknown, formData: FormData) => Promise<{ error?: string }>;
   room?: Room;
   submitLabel: string;
 }) {

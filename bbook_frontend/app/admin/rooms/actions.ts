@@ -21,7 +21,7 @@ async function extractError(res: Response) {
     : (body.message ?? "บันทึกไม่สำเร็จ");
 }
 
-export async function createRoomAction(prevState: any, formData: FormData) {
+export async function createRoomAction(prevState: unknown, formData: FormData) {
   const res = await apiFetchAuth("/room", {
     method: "POST",
     body: JSON.stringify(parseRoomForm(formData)),
@@ -36,7 +36,7 @@ export async function createRoomAction(prevState: any, formData: FormData) {
 
 export async function updateRoomAction(
   id: string,
-  prevState: any,
+  prevState: unknown,
   formData: FormData
 ) {
   const res = await apiFetchAuth(`/room/${id}`, {

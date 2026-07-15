@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { BookingForm } from "./booking-form";
+import type { Room } from "@/lib/types";
 
 const AMENITY_LABELS: Record<string, string> = {
   projector: "มีจอโปรเจคเตอร์",
@@ -47,7 +48,7 @@ export default async function HomePage() {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          {rooms.map((room: any) => (
+          {rooms.map((room: Room) => (
             <Card key={room.id}>
               <CardHeader>
                 <CardTitle>{room.name}</CardTitle>

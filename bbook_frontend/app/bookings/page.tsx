@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cancelBookingAction } from "./actions";
+import type { Booking } from "@/lib/types";
 
 function StatusBadge({ status }: { status: string }) {
   const s = status?.toLowerCase() ?? "";
@@ -56,7 +57,7 @@ export default async function BookingsPage() {
           </Card>
         ) : (
           <div className="space-y-3">
-            {bookings.map((b: any) => (
+            {bookings.map((b: Booking) => (
               <Card key={b.id}>
                 <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="space-y-1.5">

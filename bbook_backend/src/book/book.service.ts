@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
+import { BookingStatus } from 'generated/prisma/client';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { JwtPayloadDto } from 'src/auth/dto/jwt-payload.dto';
@@ -141,14 +142,14 @@ export class BookService {
     };
   }
 
-  async updateStatus(id: string, status: string) {
+  async updateStatus(id: string, status: BookingStatus) {
     const existing = await this.prismaService.book.findFirst({ where: { id } });
     if (!existing) {
       throw new NotFoundException('ไม่พบข้อมูล');
     }
     const res = await this.prismaService.book.update({
       where: { id },
-      data: { status: status as any },
+      data: { status },
       include: {
         room: true,
         user: { omit: { password: true } },

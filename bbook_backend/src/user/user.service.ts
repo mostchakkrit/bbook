@@ -36,7 +36,7 @@ export class UserService {
     const user = await this.prismaService.user.create({
       data: { ...createUserDto, password: hashedPassword, roleId: role.id },
     });
-    const { password, ...result } = user;
+    const { password: _password, ...result } = user;
     return {
       statusCode: 201,
       message: 'created user successfully',
@@ -56,11 +56,11 @@ export class UserService {
     });
 
     if (!res.ok) {
-      const errorBody = await res.json();
+      const errorBody: unknown = await res.json();
       console.error('LINE verify error:', errorBody);
       throw new UnauthorizedException('LINE token ไม่ถูกต้อง');
     }
-    const verified = await res.json();
+    const verified = (await res.json()) as { sub: string };
     const lineUserId = verified.sub;
 
     const existing = await this.prismaService.user.findFirst({
@@ -74,7 +74,7 @@ export class UserService {
       where: { id: userId },
       data: { lineUserId },
     });
-    const { password, ...result } = user;
+    const { password: _password, ...result } = user;
     return { statusCode: 200, message: 'ผูกบัญชี LINE สำเร็จ', data: result };
   }
 
@@ -87,11 +87,11 @@ export class UserService {
     if (!user) {
       throw new NotFoundException('ไม่พบผู้ใช้งาน');
     }
-    const { password, ...result } = user;
+    const { password: _password, ...result } = user;
     return result;
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
+  update(id: string, _updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 

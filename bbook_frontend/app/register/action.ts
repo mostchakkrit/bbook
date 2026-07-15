@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 
-export async function registerAction(prevState: any, formData: FormData) {
+export async function registerAction(prevState: unknown, formData: FormData) {
   const res = await apiFetch("/user", {
     method: "POST",
     body: JSON.stringify({

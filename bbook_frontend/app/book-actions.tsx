@@ -4,7 +4,7 @@ import { apiFetchAuth } from "@/lib/api";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function createBookingAction(prevState: any, formData: FormData) {
+export async function createBookingAction(prevState: unknown, formData: FormData) {
   const startLocal = formData.get("startTime") as string;
   const endLocal = formData.get("endTime") as string;
 

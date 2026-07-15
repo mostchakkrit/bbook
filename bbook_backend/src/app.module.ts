@@ -9,7 +9,14 @@ import { AuthModule } from './auth/auth.module';
 import { LineModule } from './line/line.module';
 
 @Module({
-  imports: [PrismaModule, RoomModule, BookModule, UserModule, AuthModule, LineModule],
+  imports: [
+    PrismaModule,
+    RoomModule,
+    BookModule,
+    UserModule,
+    AuthModule,
+    LineModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
