@@ -2,7 +2,7 @@ name: Deploy Backend
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     paths:
       - "bbook_backend/**"
       - ".github/workflows/deploy-backend.yml"
